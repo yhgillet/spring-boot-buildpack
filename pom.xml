@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.1.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>spring-boot-buildpack</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>spring-boot-buildpack</name>
+	<description>Demo project for Spring Boot buildpack bug</description>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>append_options</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>buildpack-image</id>
+								<goals>
+									<goal>build-image-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<image>
+								<builder>paketobuildpacks/builder:tiny</builder>
+								<tags>
+									<tag>spring-boot-buildpack:dev</tag>
+								</tags>
+								<env>
+									<BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
+									<BPE_DELIM_JAVA_TOOL_OPTIONS>;</BPE_DELIM_JAVA_TOOL_OPTIONS>
+									<BPE_APPEND_JAVA_TOOL_OPTIONS>-Dfile.encoding=UTF-16</BPE_APPEND_JAVA_TOOL_OPTIONS>
+								</env>
+							</image>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>runtime_options</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>buildpack-image</id>
+								<goals>
+									<goal>build-image-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<image>
+								<builder>paketobuildpacks/builder:tiny</builder>
+								<tags>
+									<tag>spring-boot-buildpack:dev</tag>
+								</tags>
+								<env>
+									<BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
+									<!--BPE_JAVA_TOOL_OPTIONS>-Dfile.encoding=UTF-16</BPE_JAVA_TOOL_OPTIONS-->
+									<BPE_APPEND_JAVA_TOOL_OPTIONS>-Dfile.encoding=UTF-16</BPE_APPEND_JAVA_TOOL_OPTIONS>
+								</env>
+							</image>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
+</project>
